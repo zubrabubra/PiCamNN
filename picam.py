@@ -15,10 +15,10 @@ from yad2k.models.keras_yolo import yolo_eval, yolo_head
 ---# GLOBAL VARIABLES #---
 '''
 #USER SETTINGS :
+video_input = "rtsp://192.168.10.10:554/s0"
 maxDays = 7                      #The recorded videos will be destroyed after "maxDays" days
 baseFolder = "/var/www/html/"    #Apache's base folder
-scriptFolder = "/home/rafa/rs-components/smart-cameras/PiCamNN/" #The folder which contains main script (picam.py)
-num_cam = -1       #Number of the camera (if -1 it will be the first camera read by the system)
+scriptFolder = "/home/dima/Projects/smart-cameras/PiCamNN/" #The folder which contains main script (picam.py)
 frame_check = 17   #Frames to check before quit
 time_chunck = 2   #Time to consider for a new action
 telegram_user = "" #Your telegram user name so all the images will be sent to your telegram char with yourself
@@ -188,7 +188,7 @@ if __name__ == "__main__":
 #Camera Input
     cap = None
     try:
-        cap = cv2.VideoCapture("rtsp://192.168.10.10:554/s0") #Trying to open camera
+        cap = cv2.VideoCapture(video_input) #Trying to open camera
         _,dim = cap.read()
         if not _ or dim.shape == (0,0,0) :
             printExit("[PiCam] Error occured when opening the camera stream!")
