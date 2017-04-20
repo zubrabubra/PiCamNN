@@ -159,22 +159,21 @@ def yoloThread():
                                 xs.append(right-i)
                                 ys.append(top+i)
                                 ys.append(bottom-i)
-                        if True:
-                            img_name = scriptFolder+"imgs/{}.png".format(num)
-                            # cv2.imwrite(img_name,mat[min(ys):max(ys),min(xs):max(xs)]) #Only saving the rectangle in which persons' got detected
-                            ### D.Platon changes. Save whole frame with highlighted person.
-                            cv2.rectangle(mat, (min(xs), min(ys)), (max(xs), max(ys)), (0, 0, 255), 2)
-                            cv2.imwrite(img_name, mat)
-                            out_s = "[{}] Detected person (taken {}s)!\n".format(time.strftime("%H:%M:%S"),round(time.time()-times[0])) #Log output
-                            print(out_s)
-                            flog.write(out_s)
-                            flog.flush()
-                            #try: #Preventig Problems like no connection #I've used subprocess to set a timeout
-                            #    subprocess.call("telegram-cli -W -e \'send_photo {} {} \' ".format(telegram_user,img_name),timeout=30,shell=True)
-                            #except Exception as exc:
-                            #    print("[PiCam] Some error occured in YOLO Thread ({}) :".format(time.strftime("%H:%M:%S")),exc)
-                            num += 1
-                            old_time = times[0] #Updating detection time
+                        img_name = scriptFolder+"imgs/{}.png".format(num)
+                        # cv2.imwrite(img_name,mat[min(ys):max(ys),min(xs):max(xs)]) #Only saving the rectangle in which persons' got detected
+                        ### D.Platon changes. Save whole frame with highlighted person.
+                        cv2.rectangle(mat, (min(xs), min(ys)), (max(xs), max(ys)), (0, 0, 255), 2)
+                        cv2.imwrite(img_name, mat)
+                        out_s = "[{}] Detected person (taken {}s)!\n".format(time.strftime("%H:%M:%S"),round(time.time()-times[0])) #Log output
+                        print(out_s)
+                        flog.write(out_s)
+                        flog.flush()
+                        #try: #Preventig Problems like no connection #I've used subprocess to set a timeout
+                        #    subprocess.call("telegram-cli -W -e \'send_photo {} {} \' ".format(telegram_user,img_name),timeout=30,shell=True)
+                        #except Exception as exc:
+                        #    print("[PiCam] Some error occured in YOLO Thread ({}) :".format(time.strftime("%H:%M:%S")),exc)
+                        num += 1
+                        old_time = times[0] #Updating detection time
             except Exception as ex:
                 print("[PiCam] Some error occured in YOLO Thread ({}) :".format(time.strftime("%H:%M:%S")),ex)
             del times[0]   #Deleting first Detection time
