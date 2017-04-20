@@ -163,7 +163,7 @@ def yoloThread():
                             img_name = scriptFolder+"imgs/{}.png".format(num)
                             # cv2.imwrite(img_name,mat[min(ys):max(ys),min(xs):max(xs)]) #Only saving the rectangle in which persons' got detected
                             ### D.Platon changes. Save whole frame with highlighted person.
-                            cv2.rectangle(mat, (min(xs), min(ys)), (max(xs), max(ys)), (0, 255, 0), 2)
+                            cv2.rectangle(mat, (min(xs), min(ys)), (max(xs), max(ys)), (0, 0, 255), 2)
                             cv2.imwrite(img_name, mat)
                             out_s = "[{}] Detected person (taken {}s)!\n".format(time.strftime("%H:%M:%S"),round(time.time()-times[0])) #Log output
                             print(out_s)
