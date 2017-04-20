@@ -1,12 +1,14 @@
 #!/usr/bin/python3
 
 import time
+import datetime
 import threading
 import cv2
 import numpy as np
 import subprocess
+import os
 from sys import exit
-from os  import system
+from os import system
 from keras import backend as K
 from keras.models import load_model
 from yad2k.models.keras_yolo import yolo_eval, yolo_head
@@ -159,7 +161,11 @@ def yoloThread():
                                 xs.append(right-i)
                                 ys.append(top+i)
                                 ys.append(bottom-i)
-                        img_name = scriptFolder+"imgs/{}.png".format(num)
+                        split_datetime = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S.%f").split(' ')
+                        img_dir_path = scriptFolder + "imgs/" + split_datetime[0]
+                        os.makedirs(img_dir_path, exist_ok=True)
+                        img_name = img_dir_path + "/" + split_datetime[1] + ".png"
+                        #img_name = scriptFolder+"imgs/{}.png".format(num)
                         # cv2.imwrite(img_name,mat[min(ys):max(ys),min(xs):max(xs)]) #Only saving the rectangle in which persons' got detected
                         ### D.Platon changes. Save whole frame with highlighted person.
                         cv2.rectangle(mat, (min(xs), min(ys)), (max(xs), max(ys)), (0, 0, 255), 2)
