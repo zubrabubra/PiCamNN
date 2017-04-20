@@ -199,31 +199,32 @@ if __name__ == "__main__":
         print("[PiCam] Height:{} | Width:{}".format(h,w))
     except:
         printExit("[PiCam] Error occured when opening the camera stream!")
+# D. Platon. Remove video output.
 #Video Output
-    writer = None
-    err = "[PiCam] Error occured when opening the output video stream!"
-    load = handleFile(name) #Updating web_file
-    if not load:system("mv {}.avi {}_.avi".format(baseFolder+name,baseFolder+name))
-    writer = cv2.VideoWriter(baseFolder+name+".avi", cv2.VideoWriter_fourcc(*"MJPG"), 21,(w,h), True)
-    if not writer.isOpened():
-        printExit(err) #If output Stream is unavailable
+#    writer = None
+#    err = "[PiCam] Error occured when opening the output video stream!"
+#    load = handleFile(name) #Updating web_file
+#    if not load:system("mv {}.avi {}_.avi".format(baseFolder+name,baseFolder+name))
+#    writer = cv2.VideoWriter(baseFolder+name+".avi", cv2.VideoWriter_fourcc(*"MJPG"), 21,(w,h), True)
+#    if not writer.isOpened():
+#        printExit(err) #If output Stream is unavailable
 #Loading video file of the same day:
-    if not load:
-        try:
-            print("[PiCam] Loading old video File...",end="")
-            read = cv2.VideoCapture(baseFolder+name+"_.avi")
-            _,mat = read.read()
-            while _ :
-                if mat.shape == (0,0,0) or mat.shape[0] != h or mat.shape[1] != w:
-                    print("[PiCam] Couldn't load old file skipping(shape {})...!".format(mat.shape))
-                    break
-                writer.write(mat)
-                _,mat = read.read()
-            del read,mat
-            print("loaded!")
-        except:
-            print("\n[PiCam] Couldn't load old file skipping...!")
-        system("rm {}_.avi".format(baseFolder+name)) #Removing old video file
+#    if not load:
+#        try:
+#            print("[PiCam] Loading old video File...",end="")
+#            read = cv2.VideoCapture(baseFolder+name+"_.avi")
+#            _,mat = read.read()
+#            while _ :
+#                if mat.shape == (0,0,0) or mat.shape[0] != h or mat.shape[1] != w:
+#                    print("[PiCam] Couldn't load old file skipping(shape {})...!".format(mat.shape))
+#                    break
+#                writer.write(mat)
+#                _,mat = read.read()
+#            del read,mat
+#            print("loaded!")
+#        except:
+#            print("\n[PiCam] Couldn't load old file skipping...!")
+#        system("rm {}_.avi".format(baseFolder+name)) #Removing old video file
         
 #Starting Yolo thread
     yoloThread = threading.Thread(target=yoloThread)
@@ -257,7 +258,8 @@ if __name__ == "__main__":
                     times.append(time.time())#Detection Time
                 frc += 1 #FrameCount +1
                 cv2.putText(b,name.replace("_"," ")+" "+time.strftime("%H:%M:%S"),(50,h - 50),cv2.FONT_HERSHEY_SIMPLEX, 2,(255,255,255))
-                writer.write(cv2.resize(b,(w,h))) #Adding to File
+
+                #writer.write(cv2.resize(b,(w,h))) #Adding to File
 
             # D. Platon Remove clearing of dirs.
             #if time.strftime("%d") != day:
