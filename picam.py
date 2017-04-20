@@ -259,23 +259,24 @@ if __name__ == "__main__":
                 cv2.putText(b,name.replace("_"," ")+" "+time.strftime("%H:%M:%S"),(50,h - 50),cv2.FONT_HERSHEY_SIMPLEX, 2,(255,255,255))
                 writer.write(cv2.resize(b,(w,h))) #Adding to File
 
-            if time.strftime("%d") != day:
-                writer.release() #Closing old video output
-                frc = 0          
-                print("[PiCam] Cleaning imgs dir...")
-                system("rm {}".format(scriptFolder+"imgs/*"))
-                #Handling FLOG:
-                flog.close()
-                system("echo '### PiCam Live Logs###' > {}".format(baseFolder+"logs")) #Cleaning Logs file
-                flog = open(baseFolder+"logs","a") 
-                #FLOG end
-                print("[PiCam] New day! Restarting video output....")
-                name = time.strftime("%c").replace(" ","_")[0:10]
-                writer = cv2.VideoWriter(baseFolder+name+".avi", cv2.VideoWriter_fourcc(*"MJPG"), 21,(w,h), True)
-                print("[PiCam] Updating index.html...")
-                handleFile(name)
-                day = time.strftime("%d")
-                print("[PiCam] Done! Resuming main loop...")
+            # D. Platon Remove clearing of dirs.
+            #if time.strftime("%d") != day:
+            #    writer.release() #Closing old video output
+            #    frc = 0          
+            #    print("[PiCam] Cleaning imgs dir...")
+            #    system("rm {}".format(scriptFolder+"imgs/*"))
+            #    #Handling FLOG:
+            #    flog.close()
+            #    system("echo '### PiCam Live Logs###' > {}".format(baseFolder+"logs")) #Cleaning Logs file
+            #    flog = open(baseFolder+"logs","a") 
+            #    #FLOG end
+            #    print("[PiCam] New day! Restarting video output....")
+            #    name = time.strftime("%c").replace(" ","_")[0:10]
+            #    writer = cv2.VideoWriter(baseFolder+name+".avi", cv2.VideoWriter_fourcc(*"MJPG"), 21,(w,h), True)
+            #    print("[PiCam] Updating index.html...")
+            #    handleFile(name)
+            #    day = time.strftime("%d")
+            #    print("[PiCam] Done! Resuming main loop...")
         except Exception as ex:
             print("Some error occured : ",ex)
             sys.exit(-1)
