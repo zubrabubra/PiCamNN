@@ -146,21 +146,25 @@ def yoloThread():
                     #Searching for detection:
                     out_boxes, out_scores, out_classes = sess.run([boxes, scores, classes],feed_dict={yolo_model.input: in_mat,input_image_shape: [mat.shape[1], mat.shape[0]],K.learning_phase(): 0})
                     if len(out_boxes) > 0:
-                        writ = False
-                        xs,ys = [],[]  #X's and Y's coordinate
+                        #xs,ys = [],[]  #X's and Y's coordinate
+                        persons = []
                         for i, c in reversed(list(enumerate(out_classes))):
                             if c == 14: #14 is the label for persons
-                                writ = True
                                 box = out_boxes[i]
                                 top, left, bottom, right = box
                                 top = max(0, np.floor(top + 0.5).astype('int32'))
                                 left = max(0, np.floor(left + 0.5).astype('int32'))
                                 bottom = min(mat.shape[1], np.floor(bottom + 0.5).astype('int32'))
                                 right = min(mat.shape[0], np.floor(right + 0.5).astype('int32'))
-                                xs.append(left+i)
-                                xs.append(right-i)
-                                ys.append(top+i)
-                                ys.append(bottom-i)
+                                persons.append({"top": top, "left": left, "bottom": bottom, "right": right})
+                                #xs.append(left+i)
+                                #xs.append(right-i)
+                                #ys.append(top+i)
+                                #ys.append(bottom-i)
+                        # Drow rersons.
+                        for p in persons:
+                            cv2.rectangle(mat, (p["left"], p["bottom"]), (p["right"], p["top"]), (0, 225, 0), 2)
+                        # Save image.
                         split_datetime = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S.%f").split(' ')
                         img_dir_path = scriptFolder + "imgs/" + split_datetime[0]
                         os.makedirs(img_dir_path, exist_ok=True)
@@ -168,7 +172,11 @@ def yoloThread():
                         #img_name = scriptFolder+"imgs/{}.png".format(num)
                         # cv2.imwrite(img_name,mat[min(ys):max(ys),min(xs):max(xs)]) #Only saving the rectangle in which persons' got detected
                         ### D.Platon changes. Save whole frame with highlighted person.
-                        cv2.rectangle(mat, (min(xs), min(ys)), (max(xs), max(ys)), (0, 0, 255), 2)
+                        #min_xs = min(xs)
+                        #min_ys = min(ys)
+                        #max_xs = max(xs)
+                        #max_ys = max(ys)
+                        #cv2.rectangle(mat, (min_xs, min_ys), (max_xs, max_ys), (0, 0, 255), 2)
                         cv2.imwrite(img_name, mat)
                         out_s = "[{}] Detected person (taken {}s)!\n".format(time.strftime("%H:%M:%S"),round(time.time()-times[0])) #Log output
                         print(out_s)
